@@ -1,0 +1,173 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+from splinter import Browser
+from bs4 import BeautifulSoup as bs
+import requests
+import time
+
+import pandas as pd
+
+
+#URLs to scrape / find information from 
+nasa_news_url = "https://mars.nasa.gov/news/"
+jpl_imgs_url = "https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars"
+jpl_imgs_server = "https://www.jpl.nasa.gov"
+
+twitter_mars_url = "https://twitter.com/marswxreport?lang=en"
+
+mars_fact_url = "http://space-facts.com/mars/"
+
+mars_astro_url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
+mars_astro_server = "https://astrogeology.usgs.gov"
+
+
+# Global Functions
+def init_browser():
+    # @NOTE: Replace the path with your actual path to the chromedriver
+    executable_path = {"executable_path": "E:/chromeDriver/chromedriver.exe"}
+    return Browser("chrome", **executable_path, headless=False)
+
+
+def get_latest_marsNews():
+    try:
+        #get html from NASA news URL
+        mars_news = requests.get(nasa_news_url)
+        if(mars_news.status_code == 200):
+            # parse html file using BS4
+            mars_cnt = bs(mars_news.content, "lxml")
+            #mars_cnt.prettify()
+            news_title = mars_cnt.find("div", class_= "content_title").a.text.strip()
+            #print(news_title)
+            news_subtxt = mars_cnt.find("div", class_= "rollover_description_inner").text.strip()
+            #print(news_subtxt)
+            
+            return (news_title, news_subtxt)
+            
+            
+        else:
+            raise RequestException
+    except requests.exceptions.RequestException as e:
+        return e
+
+
+# Get Latest Mars image from JP wesite
+def scrape_jps_image():
+    with init_browser() as browser:
+    
+        browser.visit(jpl_imgs_url)
+
+        time.sleep(1)
+
+        # Scrape page into Soup
+        html = browser.html
+        img_cnt = bs(html, "html.parser")
+
+        # Get the div section that holds mars images
+        #mars_imgs = img_cnt.find("div",class_ = "image_and_description_container").find("div", class_="img").img['src']
+
+        mars_imgs = img_cnt.find("li",class_ = "slide")
+
+
+        mars_img = jpl_imgs_server+mars_imgs.a['data-fancybox-href']
+
+        # Quite the browser after scraping
+        #browser.quit()
+
+        # Return results
+        return mars_img
+
+
+#testing
+#mars_img_link = scrape_jps_image()
+#mars_img_link
+
+
+def get_latest_marsWeather():
+    try:
+        #get html from NASA Twitter URL
+        twit_resp = requests.get(twitter_mars_url)
+        if(twit_resp.status_code == 200):
+            # parse html file using BS4
+            mars_wthr_twit = bs(twit_resp.content, "lxml")
+            #mars_wthr_twit.prettify()
+            wthr_twt = mars_wthr_twit.find("div",{"data-name": "Mars Weather"},class_= "tweet js-stream-tweet js-actionable-tweet js-profile-popup-actionable dismissible-content original-tweet js-original-tweet has-cards has-content")
+            mars_weather = wthr_twt.p.text.strip()
+
+            mars_weather = mars_weather.rstrip("pic.twitter.com/anlHR95BMs")
+            #mars_weather
+
+            return mars_weather
+            
+            
+        else:
+            raise RequestException
+    except requests.exceptions.RequestException as e:
+        return e
+
+
+#testing
+#get_latest_marsWeather()
+
+def get_mars_profile():
+    mars_facts = pd.read_html(mars_fact_url)[0]
+
+    mars_facts.rename(columns = {0:"Profile_param",1:"Value"}, inplace = True)
+
+    mars_facts.set_index("Profile_param",inplace = True)
+
+    return mars_facts
+
+#testing
+#df = get_mars_profile()
+#df.to_html()
+
+def get_mars_hemis_imgs():
+    hemi_imgs = []
+    with init_browser() as browser:
+        browser.visit(mars_astro_url)
+        time.sleep(1)
+
+        # Scrape page into Soup
+        html = browser.html
+        astroPg = bs(html, "html.parser")
+
+        hemi_link = astroPg.find_all("h3")
+        
+        for hemi in hemi_link:
+            img_dict = {}
+            browser.click_link_by_partial_text(hemi.text)
+            time.sleep(2)
+
+            html = browser.html
+            imgPg = bs(html, "lxml")
+
+            img_dict['Title'] = hemi.text
+            img_dict['ImgURL'] = imgPg.find("div", class_ = "downloads").a['href']
+
+            hemi_imgs.append(img_dict)
+            browser.click_link_by_partial_text("Back")
+    
+    return hemi_imgs
+            
+
+#testing
+#get_mars_hemis_imgs()
+
+def scrape():
+    mars_info = {}
+    mars_info['NewsTitle'],mars_info['News_subTitle'] = get_latest_marsNews()
+    mars_info['mars_LatestImg'] = scrape_jps_image()
+    mars_info['mars_latestWthr'] = get_latest_marsWeather()
+    mars_info['mars_profile'] = [get_mars_profile().to_html()]
+    mars_info['mars_hemis_imgs'] = get_mars_hemis_imgs()
+    
+    return mars_info
+
+
+# testing
+#scrape()
+
+
+
+

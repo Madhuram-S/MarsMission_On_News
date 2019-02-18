@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Mission To Mars - News & Pics</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="jumbotron text-center" style="padding:20px; margin:5px;">
+      <h1 style="font-size:42px;font-weight: bold">Mission to Mars</h1>
+      <p><small>Interested in Mars? Here is a cocktail of information from facts about Mars to latest news from 
+        mission to Mars from NASA.</small></p>      
+      <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Get latest on Mars</a></p>
+    </div>
+    <div class="row">
+        <div class = "col-xs-1 col-md-1" style="width:2%"></div>
+        <div class = "col-xs-11 col-md-11">
+            <!-- Latest News Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h3><strong>Latest Mars News</strong></h3>
+                </div>
+                <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+                <div class="card-body">
+                  <h4 class="card-title"><strong>{{marsData.NewsTitle}}</strong></h4>
+                  <p class="card-text">{{marsData.News_subTitle}}</p>
+                  <p class="card-text text-right">
+                    <small class="text-muted">-Source : NASA Mars New website</small>
+                    <small class="text-muted">For more news visit <a href="https://mars.nasa.gov/news/?page=0&per_page=40&order=publish_date+desc%2Ccreated_at+desc&search=&category=19%2C165%2C184%2C204&blank_scope=Latest" class="card-link" target = "_blank">
+                    NASA's news website</small></a>
+                </p>
+                </div>
+              </div>
+              <!-- <br><br> -->
+             
+        </div>
+        <!-- <div class = "col-xs-1 col-md-1" style="width:2%"></div> -->
+    </div>
+    <hr>
+    <div class = "row">
+    <div class = "col-xs-0 col-md-1" style="width:2%"></div>
+    
+    <div class = "col-xs-12 col-md-7">
+        <!-- Mars Weather section -->
+        <div class="card w-50">
+            
+            <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+            <div class="card-body"  style="border-width:1px;">
+              <h4 class="card-title"><strong>Current Weather on Mars</strong></h4>
+              
+              <p class="card-text">{{marsData.mars_latestWthr}}</p>
+              <span class="card-text text-left">
+                  <small class="text-muted">-Source : Mars Weather twitter account</small>
+              </span>
+              
+            </div>
+        </div>
+        <br><br>
+        <!-- Mars Profile Section -->
+        <div class="card">
+            
+              <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+              <div class="card-body"  style="border-width:1px;">
+                <h4 class="card-title"><strong>Mars Planet Profile</strong></h4>
+                <p class="card-text">{{marsData.mars_profile[0] | safe}}</p>
+                <p class="card-text text-left">
+                  <small class="text-muted">-Source : Space facts</small>                  
+              </p>
+              </div>
+        </div>
+      </div>
+      <div class = "col-xs-12 col-md-4">
+        <div class="card bg-dark text-white">
+            <div class="card-header">
+                <h3><strong>Featured Mars Image</strong></h3>
+            </div>
+            <img class="card-img" src={{marsData.mars_LatestImg}} alt="Featured Mars Image" 
+            width = "115%">
+            <div class="card-img-overlay">
+                <p class="card-text">
+                  <small class="text-muted">Source : NASA Jet Propulsion Laboratory</small>
+                </p>
+            </div>
+          </div>
+        </div></div>
+    <!-- <div class = "row">
+      <div class="col-xs-2 col-md-2" style = "width : 2%"></div>
+      <div class = "col-xs-12 col-md-8"> -->
+      
+      <div class = "card-deck"  style = "display: inline-block;">
+          <div class="card-header text-center">
+              <h3><strong>Mars Hemispheres</strong></h3>
+              <hr>
+          </div>
+          <div class = "row text-center">
+              
+          {% for hemi in marsData.mars_hemis_imgs %} 
+          <div class = "col-xs-12 col-md-6">
+          <div class="card" style = "display: inline-block;">            
+            <img class="img-thumbnail" src="{{hemi.ImgURL}}" alt="{{hemi.Title}}" width="70%">
+            <div class="card-body"  style="border-width:1px;">
+              <h4 class="card-title"><strong>{{hemi.Title}}</strong></h4>
+            </div>
+          </div>
+          
+          </div>
+          
+        {% endfor %}
+        
+      </div></div>
+      
+        <!-- </div>
+        <div class="col-xs-2 col-md-2" style = "width : 10%"></div>
+      </div> -->
+
+    </div>
+  </div>
+  
+</body>
+
+</html>
