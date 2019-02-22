@@ -100,6 +100,8 @@ def scrape_jps_image():
     mars_img = ""
     mars_img_desc = ""
     mars_img_thumnail = ""
+    mars_img_title = ""
+    
     try:
         with init_browser() as browser:
         
