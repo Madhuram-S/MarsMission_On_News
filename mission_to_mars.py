@@ -121,18 +121,19 @@ def scrape_jps_image():
             mars_img = jpl_imgs_server+mars_imgs.a['data-fancybox-href']
             mars_img_desc = mars_imgs.a['data-description']
             mars_img_thumnail = jpl_imgs_server+mars_imgs.a['data-thumbnail']
+            mars_img_title = mars_imgs.a['data-title']
 
             # Quite the browser after scraping
             #browser.quit()
 
             # Return results
-            return (mars_img, mars_img_desc, mars_img_thumnail)
+            return (mars_img, mars_img_desc, mars_img_thumnail, mars_img_title)
             
     except Exception as e:
         scrape_status['status'] = False
         scrape_status['scrape_error_msg'].append("Error@get_latest_image. Failed with reason %s" % (repr(e)))
         
-        return (mars_img, mars_img_desc,mars_img_thumnail)
+        return (mars_img, mars_img_desc,mars_img_thumnail, mars_img_title)
 
 
 
@@ -154,8 +155,9 @@ def get_latest_marsWeather():
             wthr_twt = mars_wthr_twit.find("div",{"data-name": "Mars Weather"},class_= "tweet js-stream-tweet js-actionable-tweet js-profile-popup-actionable dismissible-content original-tweet js-original-tweet has-cards has-content")
             mars_weather = wthr_twt.p.text.strip()
 
-            mars_weather = mars_weather.rstrip("pic.twitter.com/anlHR95BMs")
-            mars_weather = mars_weather.split("\n")[0]
+            mars_weather = mars_weather.rstrip(wthr_twt.p.a.text.strip())
+            #mars_weather = mars_weather.split("\n")[0]
+            mars_weather = mars_weather.replace("\n"," ")
             #mars_weather
 
             return mars_weather
@@ -245,15 +247,15 @@ def get_mars_hemis_imgs():
 def scrape():
     mars_info = {}
     mars_info['NewsDate'],mars_info['NewsTitle'],mars_info['News_subTitle'] = get_latest_marsNews()
-    mars_info['mars_LatestImg'],mars_info['mars_LatestImg_desc'], mars_info['mars_img_thumbnail'] = scrape_jps_image()
+    mars_info['mars_LatestImg'],mars_info['mars_LatestImg_desc'], mars_info['mars_img_thumbnail'], mars_info['mars_img_title'] = scrape_jps_image()
     mars_info['mars_latestWthr'] = get_latest_marsWeather()
     mars_info['mars_profile'] = get_mars_profile().to_html(header = False, border = 0, \
                                                             classes = ['table table-striped table-hover borderless'])
     
     mars_info['mars_hemis_imgs'] = get_mars_hemis_imgs()
     
-    ## TEMPORARY USE - WHEN ASTROGEOLOGY SITE IS DOWN
-    #if(not mars_info['mars_hemis_imgs']):
+    # TEMPORARY USE - WHEN ASTROGEOLOGY SITE IS DOWN
+    # if(not mars_info['mars_hemis_imgs']):
     #   mars_info['mars_hemis_imgs'] = [ { "Title" : "Cerberus Hemisphere Enhanced", "ImgURL" : "https://astrogeology.usgs.gov/cache/images/cfa62af2557222a02478f1fcd781d445_cerberus_enhanced.tif_full.jpg" }, \
     #                                    { "Title" : "Schiaparelli Hemisphere Enhanced", "ImgURL" : "https://astrogeology.usgs.gov/cache/images/3cdd1cbf5e0813bba925c9030d13b62e_schiaparelli_enhanced.tif_full.jpg" }, \
     #                                    { "Title" : "Syrtis Major Hemisphere Enhanced", "ImgURL" : "https://astrogeology.usgs.gov/cache/images/ae209b4e408bb6c3e67b6af38168cf28_syrtis_major_enhanced.tif_full.jpg" }, \

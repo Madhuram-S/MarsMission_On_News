@@ -35,10 +35,11 @@ def scrape_data():
     if(scrape_status['status']):
         # update only if scrape was successful
         # Update the Mongo database using update and upsert=True
-        mars_coll.update({}, mars_data, upsert=True)
+        # mars_coll.update_one({}, mars_data, upsert=True)
+        mars_coll.replace_one({}, mars_data, True)
     else:
         # Scrape has one or more error.. log it into a separate db collection
-        mars_err_coll.update({}, scrape_status, upsert=True)
+        mars_err_coll.replace_one({}, scrape_status, True)
 
     # Redirect back to home page
     return redirect("/", code=302)
