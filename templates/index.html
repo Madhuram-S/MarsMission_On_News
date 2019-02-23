@@ -99,7 +99,9 @@
                 
                 <p class="card-text">{{marsData.mars_latestWthr}}</p>
                 <span class="card-text text-left">
-                    <small class="text-muted">-Source : Mars Weather twitter account</small>
+                    <small class="text-muted">-Source : 
+                      <a href="https://twitter.com/marswxreport?lang=en">Mars Weather twitter account</a>
+                    </small>
                 </span>
                 
               </div>
@@ -121,8 +123,11 @@
                   <h3><strong>Featured Mars Image</strong></h3>
               </div>
               <p class = "card-text" >{{marsData.mars_LatestImg_desc}}
+              <br>
               <span class="card-text">
-                  <small class="text-muted">Source : NASA Jet Propulsion Laboratory</small>
+                  <small class="text-muted">Source : 
+                    <a href="https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars">Mars Images from NASA Jet Propulsion Laboratory</a>
+                  </small>
                 </span>
               </p>
               <button type="button" class="btn btn-light" data-toggle="modal" data-target="#myModal">
@@ -142,8 +147,12 @@
               <div class="modal-dialog" style="background-color:rgba(0, 0, 0, 0.4);border:none;">
                 <div class="modal-content" style="background-color:rgba(0, 0, 0, 0.4); border:none;">
                     <div class="modal-body text-center" style="background-color:rgba(0, 0, 0, 0.4); border:none;">
+                      
                         <img src="{{marsData.mars_LatestImg}}" class="img-responsive"
                         style="border-width: 10px; width: 15rem; height:50rem; padding:15px;margin:10px; overflow-x: visible; overflow-y: visible;border-color: #f2f2f2; border-style: double;">
+                        <a href="/"><span style = "color:white; font-weight:bolder; font-size:18px;border-width:1px;vertical-align: top;text-align: right">
+                          &nbsp;&nbsp; X &nbsp;&nbsp;
+                         </span></a>
                         <br>
                         <span style = "color:white">{{marsData.mars_img_title}}</span>
                     </div>
@@ -194,7 +203,10 @@
   <div id = "mars_hemis"></div>
   <div class="card-header text-center" id = "mars_hemis">
       <h3><strong>Mars Hemispheres</strong></h3>
-      
+      <small class="text-muted text-right">-Source : 
+          <a href="https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars">
+            USGS Astrogeology website </a>
+        </small>
   </div>
   <div class = "card-deck"  style = "display: inline-block;">
           
