@@ -38,6 +38,7 @@ jpl_imgs_server = "https://www.jpl.nasa.gov"
 
 twitter_mars_url = "https://twitter.com/marswxreport?lang=en"
 
+
 mars_fact_url = "http://space-facts.com/mars/"
 
 mars_astro_url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
