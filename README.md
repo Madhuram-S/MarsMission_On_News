@@ -87,8 +87,8 @@ Using MongoDB with Flask templating, a new HTML page is created that displays al
 
 The following is the output of the final product
 
-![final_app_part1.png](Images/Mars_mission_pic1.png)
-![final_app_part2.png](Images/Mars_mission_pic2.png)
+![final_app_part1.png](Ouptut-Images/Mars_mission_pic1.png)
+![final_app_part2.png](Ouptut-Images/Mars_mission_pic2.png)
 
 ## Copyright
 
